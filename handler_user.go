@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"os"
 )
 
 func handlerLogin(s *state, cmd command) error {
@@ -9,10 +11,16 @@ func handlerLogin(s *state, cmd command) error {
 		return fmt.Errorf("usage: %s <name>", cmd.Name)
 	}
 
-	err := s.cfg.SetUser(cmd.Args[0])
+	user, err := s.db.GetUser(context.Background(), cmd.Args[0])
 	if err != nil {
-		return fmt.Errorf("Couldn't set user: %w", err)
+		fmt.Printf("user %s does not exsist\n", user.Name)
+		os.Exit(1)
 	}
-	fmt.Printf("User has been set to %s", s.cfg.Current_user_name)
+
+	err = s.cfg.SetUser(user.Name)
+	if err != nil {
+		return fmt.Errorf("Couldn't set user: %w\n", err)
+	}
+	fmt.Printf("User has been set to %s\n", s.cfg.Current_user_name)
 	return nil
 }
