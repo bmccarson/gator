@@ -16,7 +16,7 @@ type commands struct {
 func (c *commands) run(s *state, cmd command) error {
 	v, ok := c.registeredCommands[cmd.Name]
 	if !ok {
-		return fmt.Errorf("The %s command does not exsist", cmd.Name)
+		return fmt.Errorf("the %s command does not exsist", cmd.Name)
 	}
 	return v(s, cmd)
 }

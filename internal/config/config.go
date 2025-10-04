@@ -1,3 +1,4 @@
+// Package config holds all configuration data
 package config
 
 import (
@@ -7,15 +8,15 @@ import (
 )
 
 type Config struct {
-	Db_url            string
-	Current_user_name string
+	DBURL           string
+	CurrentUserName string
 }
 
 const (
 	configFile = "/.gatorconfig.json"
 )
 
-// read the config json file in the home dir and return a config struct
+// Read the config json file in the home dir and return a config struct
 func Read() (Config, error) {
 	c := Config{}
 
@@ -26,17 +27,20 @@ func Read() (Config, error) {
 
 	configJSON, err := os.ReadFile(filePath)
 	if err != nil {
-		return c, fmt.Errorf("Couldnt read the file: %s", err)
+		return c, fmt.Errorf("couldnt read the file: %s", err)
 	}
 
 	err = json.Unmarshal(configJSON, &c)
+	if err != nil {
+		return c, err
+	}
 
 	return c, nil
 }
 
-// set the user field of the config struct
+// SetUser sets the CurrentUserName in the Config
 func (c *Config) SetUser(user string) error {
-	c.Current_user_name = user
+	c.CurrentUserName = user
 
 	err := write(*c)
 	if err != nil {
@@ -49,7 +53,7 @@ func (c *Config) SetUser(user string) error {
 func getConfigPath() (string, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		return "", fmt.Errorf("Couldnt get home dir: %s", err)
+		return "", fmt.Errorf("couldnt get home dir: %s", err)
 	}
 
 	filepath := homeDir + configFile
@@ -65,17 +69,19 @@ func write(cfg Config) error {
 
 	file, err := os.Create(filePath)
 	if err != nil {
-		return fmt.Errorf("Couldnt open the file: %s", err)
+		return fmt.Errorf("couldnt open the file: %s", err)
 	}
 	defer file.Close()
 
 	json, err := json.Marshal(cfg)
+	if err != nil {
+		return err
+	}
 
 	_, err = file.Write(json)
 	if err != nil {
-		return fmt.Errorf("Couldnt write to the file: %s", err)
+		return fmt.Errorf("couldnt write to the file: %s", err)
 	}
 
 	return nil
-
 }

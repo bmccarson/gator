@@ -23,7 +23,10 @@ func main() {
 		fmt.Println(err)
 	}
 
-	db, err := sql.Open("postgres", cfg.Db_url)
+	db, err := sql.Open("postgres", cfg.DBURL)
+	if err != nil {
+		log.Fatal("couldn't connect to database")
+	}
 	dbQueries := database.New(db)
 
 	currentState := state{

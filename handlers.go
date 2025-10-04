@@ -29,7 +29,7 @@ func handlerRegister(s *state, cmd command) error {
 
 	err = s.cfg.SetUser(user.Name)
 	if err != nil {
-		return fmt.Errorf("Couldn't set user: %w\n", err)
+		return fmt.Errorf("couldn't set user: %w", err)
 	}
 
 	fmt.Printf("user %s has been logged in\n", user.Name)
@@ -49,9 +49,9 @@ func handlerLogin(s *state, cmd command) error {
 
 	err = s.cfg.SetUser(user.Name)
 	if err != nil {
-		return fmt.Errorf("Couldn't set user: %w\n", err)
+		return fmt.Errorf("couldn't set user: %w", err)
 	}
-	fmt.Printf("User has been set to %s\n", s.cfg.Current_user_name)
+	fmt.Printf("User has been set to %s\n", s.cfg.CurrentUserName)
 	return nil
 }
 
@@ -62,7 +62,7 @@ func handlerListUsers(s *state, _ command) error {
 		os.Exit(1)
 	}
 
-	currentUser := s.cfg.Current_user_name
+	currentUser := s.cfg.CurrentUserName
 
 	for _, user := range users {
 		if user == currentUser {
@@ -70,7 +70,6 @@ func handlerListUsers(s *state, _ command) error {
 		} else {
 			fmt.Printf("* %s\n", user)
 		}
-
 	}
 	return nil
 }
@@ -100,9 +99,9 @@ func handlerAddFeed(s *state, cmd command) error {
 		os.Exit(1)
 	}
 
-	usr, err := s.db.GetUser(context.Background(), s.cfg.Current_user_name)
+	usr, err := s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
 	if err != nil {
-		return fmt.Errorf("could not get %s from database", s.cfg.Current_user_name)
+		return fmt.Errorf("could not get %s from database", s.cfg.CurrentUserName)
 	}
 
 	feed, err := s.db.CreateFeed(context.Background(), database.CreateFeedParams{
