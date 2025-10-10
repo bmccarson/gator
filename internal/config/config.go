@@ -8,8 +8,8 @@ import (
 )
 
 type Config struct {
-	DBURL           string
-	CurrentUserName string
+	DBURL           string `json:"db_url"`
+	CurrentUserName string `json:"current_user_name"`
 }
 
 const (
