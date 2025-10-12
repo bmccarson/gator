@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.30.0
 
-// Package database holds all database functions
+// Package database contains all database functions in go
 package database
 
 import (
